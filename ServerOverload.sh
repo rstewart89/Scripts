@@ -10,7 +10,10 @@ rm -r wsf_* 2>&1 > /dev/null
 
 sleep 0.5
 
-x=1 y=150 z=25100
+read -p "How many instances of WSF?: `echo $'\n> '`" number
+
+x=1 y=number z=25100
+
 cp './start.sh' './startOverload.sh'
 for ((i=x; i<=y; i++))
 do
