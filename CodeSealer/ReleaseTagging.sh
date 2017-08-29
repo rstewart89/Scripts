@@ -3,10 +3,12 @@
 
 #!/bin/bash
 
+echo ""
 read -p "What version of WSF?: `echo $'\n> '`" VERSION
 
+
 WORKSPACE=$HOME/repo
-CREPO=null
+echo ""
 
 #Tagging Function
 tag_current_repo () {
@@ -95,4 +97,3 @@ echo "Tagging Obfuscator"
 tag_current_repo
 
 echo "All repositories is now tagged with $VERSION"
-done
