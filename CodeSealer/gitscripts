@@ -1,0 +1,114 @@
+#Branch reset
+#Checkout master, deletes the branch and pulls the new version
+gbreset() {
+	GBRANCH=$(git branch | sed -n 's/\* //p')
+	if [[ "$GBRANCH" == "master" ]]
+		then
+		echo "Master is checked out"
+		return
+	fi
+
+	if [[ "$GBRANCH" == "" ]]
+		then
+		echo "Master is checked out"
+		return
+	fi
+
+	git checkout master >/dev/null 2>&1
+	git branch -D $GBRANCH >/dev/null 2>&1
+	git pull >/dev/null 2>&1
+	git checkout $GBRANCH >/dev/null 2>&1
+	echo "$GBRANCH have been reset"
+}
+
+
+#standup
+standup() {
+
+	#Setup
+	current=$(pwd)
+	touch ${HOME}/standup
+	repos=${HOME}/repo
+	list=${HOME}/standup
+	
+	updates() {
+		GBRANCH=$(git branch | sed -n 's/\* //p')
+		git checkout master
+		git pull
+		echo $(git log --merges --oneline --since='1 day ago') >> ${list}
+		git checkout ${GBRANCH}
+		cd ${repos}
+	} > /dev/null 2>&1
+
+	#Client
+	echo "Generating list from 'clients'"
+	echo "Client:" >> ${list}
+	cd ${repos}/clients
+	updates
+
+	#Obfuscator
+	echo "Generating list from 'Obfuscator'"
+	echo "	" >> ${list}
+	echo "Obfuscator: " >> ${list}	
+	cd ${repos}/obfuscator
+	updates
+
+	#CICD
+	echo "Generating list from 'CICD'"
+	echo "	" >> ${list}
+	echo "CICD: " >> ${list}
+	cd ${repos}/cicd/codesealer_build_tools
+	updates
+
+	echo "	" >> ${list}
+	echo "BT: " >> ${list}
+	cd ${repos}/cicd/browsertest
+	updates
+
+	echo "	" >> ${list}
+	echo "WSF-BT: " >> ${list}
+	cd ${repos}/cicd/wsf-browser-tests
+	updates
+
+	#WSF
+	echo "Generating list from 'WSF'"
+	echo "	" >> ${list}
+	echo "WSF-Server: " >> ${list}
+	cd ${repos}/wsf/wsf-server
+	updates
+
+	echo "	" >> ${list}
+	echo "ConfigUI: " >> ${list}
+	cd ${repos}/wsf/configui
+	updates
+
+	echo "	" >> ${list}
+	echo "Dashboard: " >> ${list}
+	cd ${repos}/wsf/dashboard
+	updates
+
+	echo "	" >> ${list}
+	echo "Services: " >> ${list}
+	cd ${repos}/wsf/services
+	updates
+
+	echo "	" >> ${list}
+	echo "Storage: " >> ${list}
+	cd ${repos}/wsf/storage
+	updates
+
+	#Report classifier
+	echo "	" >> ${list}
+	echo "Report-Classifier: " >> ${list}
+	cd ${repos}/wsf/report-classifier
+	updates
+
+	clear
+
+	echo ""
+	cat ${list}
+
+	#Cleanup
+	cd ${current}
+	rm ${list}
+}
