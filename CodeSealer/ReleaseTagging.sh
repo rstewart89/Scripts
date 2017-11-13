@@ -20,79 +20,79 @@ tag_current_repo () {
 }  > /dev/null 2>&1
 
 #Clients
-cd clients
+cd $WORKSPACE/clients
 echo "Tagging Client"
 tag_current_repo
 
 
 
 #Server
-cd wsf/wsf-server
+cd $WORKSPACE/wsf/wsf-server
 echo "Tagging WSF-Server"
 tag_current_repo 
 
 #Dashboard
-cd wsf/dashboard
+cd $WORKSPACE/wsf/dashboard
 echo "Tagging Dashboard"
 tag_current_repo
 
 #services
-cd wsf/services
+cd $WORKSPACE/wsf/services
 echo "Tagging Services"
 tag_current_repo
 
 #configui
-cd wsf/configui
+cd $WORKSPACE/wsf/configui
 echo "Tagging ConfigUI"
 tag_current_repo
 
 #Storage
-cd wsf/storage
+cd $WORKSPACE/wsf/storage
 echo "Tagging Storage"
 tag_current_repo
 
 #Categorizer
-cd wsf/categorizer
+cd $WORKSPACE/wsf/categorizer
 echo "Tagging Categorizer"
 tag_current_repo
 
 #Old Controller
-cd wsf/wsf-controller
+cd $WORKSPACE/wsf/wsf-controller
 echo "Tagging (old) controller"
 tag_current_repo
 
 
 
 #Build tools
-cd cicd/codesealer_build_tools
+cd $WORKSPACE/cicd/codesealer_build_tools
 echo "Tagging Build Tools"
 tag_current_repo
 
 #Browsertest
-cd cicd/browsertest
+cd $WORKSPACE/cicd/browsertest
 echo "Tagging Browsertests"
 tag_current_repo
 
 #WSFBT
-cd cicd/wsf-browser-tests
+cd $WORKSPACE/cicd/wsf-browser-tests
 echo "Tagging WSFBT"
 tag_current_repo
 
 #WOWTOOLS
-cd cicd/wowtools
+cd $WORKSPACE/cicd/wowtools
 echo "WOWTOOLS"
 tag_current_repo
 
 
 
 #GO Bootloader
-cd bootloader/go-bootloader
+cd $WORKSPACEbootloader/go-bootloader
 echo "Tagging GO-bootloader"
 tag_current_repo
 
 
 #Obfuscator
-cd obfuscator
+cd $WORKSPACE/obfuscator
 echo "Tagging Obfuscator"
 tag_current_repo
 
