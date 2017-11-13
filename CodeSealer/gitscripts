@@ -112,3 +112,26 @@ standup() {
 	cd ${current}
 	rm ${list}
 }
+
+#MAW Branching
+mawbranch() {
+	mawing () {
+		GBRANCH=$(git branch | sed -n 's/\* //p')
+		git checkout master
+		git pull
+		git checkout $GBRANCH
+		mawa='maw'
+		mawb=${GBRANCH/wsf/$mawa}
+		git checkout -b $mawb
+		git rebase master
+	} > /dev/null 2>&1
+
+	mawing
+
+	if [[ "$1" == "push" ]]
+		then
+		echo "Pushing $mawb"
+		git push origin $mawb
+		return
+	fi
+}
