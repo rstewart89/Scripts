@@ -18,6 +18,12 @@ gbreset() {
 	git branch -D $GBRANCH >/dev/null 2>&1
 	git pull >/dev/null 2>&1
 	git checkout $GBRANCH >/dev/null 2>&1
+
+	GBRANCH2=$(git branch | sed -n 's/\* //p')
+	if [[ "$GBRANCH2" == "master" ]]
+		then
+		git checkout -b $GBRANCH >/dev/null 2>&1
+	fi 
 	echo "$GBRANCH have been reset"
 }
 
@@ -131,7 +137,7 @@ mawbranch() {
 	if [[ "$1" == "push" ]]
 		then
 		echo "Pushing $mawb"
-		git push origin $mawb
+		git push origin $mawb > /dev/null 2>&1
 		return
 	fi
 }
