@@ -127,7 +127,14 @@ mawbranch() {
 		git pull
 		git checkout $GBRANCH
 		mawa='maw'
-		mawb=${GBRANCH/wsf/$mawa}
+			if [[ $GBRANCH == "wsf"* ]]; then
+				mawb=${GBRANCH/wsf/$mawa}
+			fi
+
+			if [[ $GBRANCH == "cicd"* ]]; then
+				mawb=${GBRANCH/cicd/$mawa}
+			fi
+
 		git checkout -b $mawb
 		git rebase master
 	} > /dev/null 2>&1
