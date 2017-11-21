@@ -47,8 +47,11 @@ standup() {
 		if [[ "$param" == "weekend" ]]
 			then
 			echo -e "\n$(git log --merges --oneline --since='3 day ago')" >> ${list}
-		else
+		elif [[ -z "$param" ]]
+			then
 			echo -e "\n$(git log --merges --oneline --since='1 day ago')" >> ${list}
+		else
+			echo -e "\n$(git log --merges --oneline --since=''$param' day ago')" >>${list}
 		fi
 
 		#echo $(cat $tempList | grep -oP '\S*maw\S*') >> $list
