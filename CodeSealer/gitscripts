@@ -119,6 +119,11 @@ standup() {
 	cd ${repos}/wsf/storage
 	updates
 
+	echo "	" >> ${list}
+	echo -e "\n - Common: " >> ${list}
+	cd ${repos}/wsf/common
+	updates
+
 	#Report classifier
 	echo "	" >> ${list}
 	echo -e "\n - Report-Classifier: " >> ${list}
