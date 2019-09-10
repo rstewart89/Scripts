@@ -4,6 +4,10 @@
 $currentContext = Get-AzContext
 $subscriptionIDlist = Get-AzSubscription
 
+if (!($currentContext)) {
+    Connect-AzAccount
+}
+
 $arrayOfVMs = @()
 
 #Looping through all available subscriptions
@@ -41,4 +45,4 @@ if ($export) {
     $arrayOfVMs | Select-Object Name, ResourceGroupName, VmSize, DiskName, DiskSku, Subscription | Export-Csv -Path C:\Users\mathias.wrobel\Desktop\Export.csv -NoTypeInformation -Append -Delimiter ";"
 }
 
-$arrayOfVMs | Format-Table -Property Name, ResourceGroupName, VmSize, DiskName, DiskSku, Subscription
+$arrayOfVMs | Format-Table -Property Name, ResourceGroupName, Subscription, VmSize, DiskName, DiskSku
