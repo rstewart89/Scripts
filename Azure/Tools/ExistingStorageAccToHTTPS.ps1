@@ -52,4 +52,10 @@ if ($export) {
     $arrayOfStorageAccounts | Select-Object StorageAccountName, ResourceGroupName, Subscription, HttpsTrafficOnly | Export-Csv -Path C:\Users\mathias.wrobel\Desktop\$outputFile -NoTypeInformation -Append -Delimiter ";"
 }
 
-$arrayOfStorageAccounts | Format-Table -Property StorageAccountName, ResourceGroupName, Subscription, HttpsTrafficOnly
+#Checking for empty list
+if ($arrayOfStorageAccounts) {
+    $arrayOfStorageAccounts | Format-Table -Property StorageAccountName, ResourceGroupName, Subscription, HttpsTrafficOnly
+}
+else {
+    Write-Output "All storage accounts is configured to only use HTTPS traffic"
+}

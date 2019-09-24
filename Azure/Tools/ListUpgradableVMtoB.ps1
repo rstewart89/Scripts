@@ -1,11 +1,12 @@
 #Author: Mathias Wrobel - Innofactor
 #Script to list VM's that can be upgraded to series B available to that tenant.
 
+#Set $listNotUpgrade to true, to print a list of VM's that is not upgradable to series B
+
 param (
     [Boolean] $export = $false,
-    [Boolean] $notUpgradeable = $false
+    [Boolean] $listNotUpgradeable = $false
 )
-
 
 $currentContext = Get-AzContext
 $subscriptionIDlist = Get-AzSubscription
@@ -30,7 +31,7 @@ ForEach ($sub in $subscriptionIDlist) {
         if ($vm.HardwareProfile.VmSize.ToString() -notmatch "Standard_b") {
             $disk = ($listOfVMDisks | Where-Object { $_.ManagedBy -eq $vm.Id })
 
-            if ($notUpgradeable) {
+            if ($listNotUpgradeable) {
                 #Checking available resize options for b-series
                 if (!(Get-AzVMSize -VMName $vm.Name -ResourceGroupName $vm.ResourceGroupName | Where-Object { $_.Name -match "Standard_b" })) {
                     $arrayOfVMs += New-Object -TypeName psobject -Property @{Name = $vm.Name;
@@ -61,9 +62,17 @@ ForEach ($sub in $subscriptionIDlist) {
 #Setting AzContext to starting point
 Set-AzContext $currentContext | Out-Null
 
+#Check for empty list
+if ($arrayOfVMs) {
+    #Printing list in console
+    $arrayOfVMs | Format-Table -Property Name, ResourceGroupName, Subscription, VmSize, DiskName, DiskSku
+
 #Exporting to csv
 if ($export) {
     $arrayOfVMs | Select-Object Name, ResourceGroupName, VmSize, DiskName, DiskSku, Subscription | Export-Csv -Path C:\Users\mathias.wrobel\Desktop\VMlistSeries.csv -NoTypeInformation -Append -Delimiter ";"
+    }
 }
 
-$arrayOfVMs | Format-Table -Property Name, ResourceGroupName, Subscription, VmSize, DiskName, DiskSku
+else {
+    Write-Output "All machines is upgradable or currently is series B"
+}
