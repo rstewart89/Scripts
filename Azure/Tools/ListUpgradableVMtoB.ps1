@@ -30,6 +30,7 @@ ForEach ($sub in $subscriptionIDlist) {
         #Checking if already in B-series
         if ($vm.HardwareProfile.VmSize.ToString() -notmatch "Standard_b") {
             $disk = ($listOfVMDisks | Where-Object { $_.ManagedBy -eq $vm.Id })
+            $ownerTag = (Get-AzResource -Name $vm.Name).Tags.Owner
 
             if ($listNotUpgradeable) {
                 #Checking available resize options for b-series
@@ -39,7 +40,8 @@ ForEach ($sub in $subscriptionIDlist) {
                         VmSize                                                    = $vm.HardwareProfile.VmSize;
                         Subscription                                              = $sub.Name;
                         DiskName                                                  = $disk.Name;
-                        DiskSku                                                   = $disk.Sku.Name
+                        DiskSku                                                   = $disk.Sku.Name;
+                        Owner                                                     = $ownerTag
                     }
                 }
             }
@@ -51,7 +53,8 @@ ForEach ($sub in $subscriptionIDlist) {
                         VmSize                                                    = $vm.HardwareProfile.VmSize;
                         Subscription                                              = $sub.Name;
                         DiskName                                                  = $disk.Name;
-                        DiskSku                                                   = $disk.Sku.Name
+                        DiskSku                                                   = $disk.Sku.Name;
+                        Owner                                                     = $ownerTag
                     }
                 }
             }
@@ -65,11 +68,11 @@ Set-AzContext $currentContext | Out-Null
 #Check for empty list
 if ($arrayOfVMs) {
     #Printing list in console
-    $arrayOfVMs | Format-Table -Property Name, ResourceGroupName, Subscription, VmSize, DiskName, DiskSku
+    $arrayOfVMs | Format-Table -Property Name, ResourceGroupName, Subscription, VmSize, Owner, DiskName, DiskSku
 
 #Exporting to csv
 if ($export) {
-    $arrayOfVMs | Select-Object Name, ResourceGroupName, VmSize, DiskName, DiskSku, Subscription | Export-Csv -Path C:\Users\mathias.wrobel\Desktop\VMlistSeries.csv -NoTypeInformation -Append -Delimiter ";"
+    $arrayOfVMs | Select-Object Name, ResourceGroupName, VmSize, Owner, DiskName, DiskSku, Subscription | Export-Csv -Path C:\Users\mathias.wrobel\Desktop\VMlistSeries.csv -NoTypeInformation -Append -Delimiter ";"
     }
 }
 
